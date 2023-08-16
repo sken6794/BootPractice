@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+ <mapper namespace="com.practice.myweb.service.NoticeMapper">
+ 	<insert id="registNotice">
+ 		insert into notice (writer, title, content, regdate,hit) values (#{writer},#{title},#{content},#{regdate},0)
+ 	</insert>
+ 	<select id="getList">
+ 		select * from notice
+ 		where writer = #{writer}
+ 		<if test="cri.searchTitle != '' and cri.searchTitle != null">
+ 		and  title like concat('%',#{cri.searchTitle},'%')
+ 		</if>
+ 		<if test="cri.searchContent != '' and cri.searchContent != null">
+ 		and  content like concat('%',#{cri.searchContent},'%')
+ 		</if>
+ 		<if test="cri.searchWriter != '' and cri.searchWriter != null">
+ 		and  writer like concat('%',#{cri.searchWriter},'%')
+ 		</if>
+ 		<if test="cri.searchTitleCont != '' and cri.searchTitleCont != null">
+ 		and  title like concat('%',#{cri.searchTitleCont},'%')
+ 		or content like concat('%',#{cri.searchTitleCont},'%')
+ 		</if>
+ 		order by bno desc
+		limit #{cri.pageStart},#{cri.amount} 		
+ 	</select>
+ 	<select id="getTotal">
+ 		select count(*) as total from notice
+ 		where writer = #{writer}
+ 		<if test="cri.searchTitle != '' and cri.searchTitle != null">
+ 		and  title like concat('%',#{cri.searchTitle},'%')
+ 		</if>
+ 		<if test="cri.searchContent != '' and cri.searchContent != null">
+ 		and  content like concat('%',#{cri.searchContent},'%')
+ 		</if>
+ 		<if test="cri.searchWriter != '' and cri.searchWriter != null">
+ 		and  writer like concat('%',#{cri.searchWriter},'%')
+ 		</if>
+ 		<if test="cri.searchTitleCont != '' and cri.searchTitleCont != null">
+ 		and  title like concat('%',#{cri.searchTitleCont},'%')
+ 		or content like concat('%',#{cri.searchTitleCont},'%')
+ 		</if>
+ 	</select>
+ 	
+ 	
+ 	
+ 	
+ 	<select id="getDetail">
+ 		select * from notice where bno = #{bno}
+ 	</select>
+ 	<select id="getToday">
+ 		select now()
+ 	</select>
+ 	<delete id="deleteNotice">
+ 		delete from notice where bno = #{bno}
+ 	</delete>
+ 	<update id="updateNotice">
+ 		update notice set title = #{title}, content = #{content} where bno = #{bno}
+ 	</update>
+ 	
+ </mapper>
